@@ -70,6 +70,7 @@ code {
   line-height: 24px;
   color: var(--ev-c-text-2);
   font-weight: 600;
+  padding: 16px;
 }
 
 .vue {
@@ -169,3 +170,122 @@ code {
     display: none;
   }
 }
+
+/* Chat input wrapper aligns with your centered layout and glass panel feel */
+.chat-input {
+  /* layout */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: end;
+
+  /* surface: translucent to sit nicely on the wavy background */
+  padding: 10px;
+  border-radius: 16px;
+  background-color: rgba(32, 33, 39, 0.35); /* similar to .versions backdrop */
+  border: 1px solid var(--ev-c-gray-1);
+  backdrop-filter: blur(24px);
+
+  /* ensure it doesn’t stick to edges in responsive contexts */
+  min-width: min(720px, 92vw);
+}
+
+/* Auto-growing textarea styled to match typography and colors */
+.chat-textarea {
+  width: 100%;
+  min-height: 2.75rem; /* fits ~2 lines */
+  max-height: 40vh;
+
+  /* typography + colors consistent with app */
+  font: inherit;
+  line-height: 1.45;
+  color: var(--ev-c-text-1);
+  background-color: rgba(255, 255, 255, 0.06);
+
+  /* shape + border language consistent with .action a and .versions */
+  border: 1px solid var(--ev-button-alt-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+
+  /* autosize-friendly */
+  resize: none;
+  overflow: hidden; /* scrollbar hidden while JS grows height */
+
+  /* interaction */
+  outline: none;
+  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+
+.chat-textarea:focus {
+  border-color: var(--ev-button-alt-hover-border);
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(100, 136, 230, 0.25); /* harmonizes with logo hover glow */
+}
+
+/* Hide scrollbars if a UA forces them (while still allowing JS-driven growth) */
+.chat-textarea {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.chat-textarea::-webkit-scrollbar {
+  display: none;
+}
+
+/* Send button mirrors the “alt” button palette with a glass hover polish */
+.send-btn {
+  align-self: center;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--ev-button-alt-border);
+  border-radius: 12px;
+
+  color: var(--ev-button-alt-text);
+  background-color: var(--ev-button-alt-bg);
+
+  font-size: 18px; /* arrow size */
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 80ms ease, opacity 140ms ease;
+}
+
+.send-btn:hover:not(:disabled) {
+  border-color: var(--ev-button-alt-hover-border);
+  color: var(--ev-button-alt-hover-text);
+  background-color: var(--ev-button-alt-hover-bg);
+  transform: translateY(-1px);
+}
+
+.send-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Optional: compact variant for very small screens to respect your media queries */
+@media (max-width: 720px) {
+  .chat-input {
+    gap: 6px;
+    padding: 8px;
+    border-radius: 14px;
+  }
+  .chat-textarea {
+    padding: 9px 10px;
+    border-radius: 10px;
+  }
+  .send-btn {
+    height: 38px;
+    min-width: 38px;
+    border-radius: 10px;
+  }
+}
+
