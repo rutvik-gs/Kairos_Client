@@ -1,13 +1,46 @@
 @import './base.css';
 
-body {
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#app {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* pin first and last children to top/bottom */
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-image: url('./wavy-lines.svg');
-  background-size: cover;
-  user-select: none;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* optional: add margin-top if you want space from top */
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* vertical centering */
+  align-items: center;      /* horizontal centering */
+  min-height: 20vh;
+  width: 100vw;
+}
+.cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 1s steps(1) infinite;
+  color: rgba(220, 225, 240, 0.38);
+  
+}
+
+@keyframes blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
 }
 
 code {
@@ -26,13 +59,7 @@ code {
   font-size: 85%;
 }
 
-#app {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 80px;
-}
+
 
 .logo {
   margin-bottom: 20px;
@@ -56,21 +83,24 @@ code {
 }
 
 .text {
-  font-size: 28px;
-  color: var(--ev-c-text-1);
-  font-weight: 700;
-  line-height: 32px;
-  text-align: center;
-  margin: 0 10px;
-  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* horizontal center (optional) */
+  justify-content: flex-start;  /* align to top vertically */
+  height: 220px;              /* or any fixed/min height you want */
 }
 
 .tip {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--ev-c-text-2);
-  font-weight: 600;
-  padding: 16px;
+  font-family: 'Inter', 'Manrope', 'Segoe UI', Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1.2;
+  color: rgba(95, 98, 105, 0.55); /* soft minimal semi-transparent text */
+  background: none;
+  padding: 0;
+  border: none;
+  letter-spacing: 0.01em;
+  text-align: center;
 }
 
 .vue {
@@ -87,6 +117,7 @@ code {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
+  font-size: 100px;
 }
 
 .actions {
@@ -187,33 +218,27 @@ code {
   backdrop-filter: blur(24px);
 
   /* ensure it doesn’t stick to edges in responsive contexts */
-  min-width: min(720px, 92vw);
+  min-width: min(900px, 92vw);
+  margin-bottom: 20px;
 }
 
 /* Auto-growing textarea styled to match typography and colors */
 .chat-textarea {
-  width: 100%;
-  min-height: 2.75rem; /* fits ~2 lines */
-  max-height: 40vh;
-
-  /* typography + colors consistent with app */
-  font: inherit;
-  line-height: 1.45;
-  color: var(--ev-c-text-1);
-  background-color: rgba(255, 255, 255, 0.06);
-
-  /* shape + border language consistent with .action a and .versions */
-  border: 1px solid var(--ev-button-alt-border);
-  border-radius: 12px;
-  padding: 10px 12px;
-
-  /* autosize-friendly */
-  resize: none;
-  overflow: hidden; /* scrollbar hidden while JS grows height */
-
-  /* interaction */
-  outline: none;
-  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+width: 100%;
+min-height: 2.75rem;
+line-height: 1.45;
+max-height: calc(1.45em * 6 + 20px);
+overflow-y: auto;
+overflow-x: hidden;
+font: inherit;
+color: var(--ev-c-text-1);
+background-color: rgba(255, 255, 255, 0.06);
+border: 1px solid var(--ev-button-alt-border);
+border-radius: 12px;
+padding: 10px 12px;
+resize: none;
+outline: none;
+transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
 }
 
 .chat-textarea:focus {
@@ -222,15 +247,24 @@ code {
   box-shadow: 0 0 0 3px rgba(100, 136, 230, 0.25); /* harmonizes with logo hover glow */
 }
 
-/* Hide scrollbars if a UA forces them (while still allowing JS-driven growth) */
-.chat-textarea {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+
 .chat-textarea::-webkit-scrollbar {
-  display: none;
+width: 10px;
 }
 
+.chat-textarea::-webkit-scrollbar-thumb {
+background: rgba(60, 63, 78, 0.6);
+border-radius: 10px;
+}
+
+.chat-textarea::-webkit-scrollbar-track {
+background: transparent;
+}
+
+.chat-textarea {
+scrollbar-width: thin;
+scrollbar-color: rgba(33, 34, 36, 0.6) transparent;
+}
 /* Send button mirrors the “alt” button palette with a glass hover polish */
 .send-btn {
   align-self: center;
@@ -289,3 +323,167 @@ code {
   }
 }
 
+/* Settings Button */
+.settings-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(32, 33, 39, 0.8);
+  border: 1px solid var(--ev-c-gray-1);
+  border-radius: 50%;
+  color: var(--ev-c-text-1);
+  font-size: 18px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: background-color 0.2s ease;
+  z-index: 1000;
+}
+
+.settings-btn:hover {
+  background: rgba(32, 33, 39, 0.9);
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: var(--ev-c-bg);
+  border: 1px solid var(--ev-c-gray-1);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--ev-c-gray-1);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--ev-c-text-1);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--ev-c-text-2);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ev-c-text-1);
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ev-button-alt-border);
+  border-radius: 8px;
+  color: var(--ev-c-text-1);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--ev-button-alt-hover-border);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.directory-input {
+  display: flex;
+  gap: 8px;
+}
+
+.directory-input .form-input {
+  flex: 1;
+}
+
+.browse-btn {
+  padding: 10px 16px;
+  background: var(--ev-button-alt-bg);
+  border: 1px solid var(--ev-button-alt-border);
+  border-radius: 8px;
+  color: var(--ev-button-alt-text);
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.browse-btn:hover {
+  background: var(--ev-button-alt-hover-bg);
+  border-color: var(--ev-button-alt-hover-border);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid var(--ev-c-gray-1);
+}
+
+.cancel-btn, .save-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid var(--ev-c-gray-1);
+  color: var(--ev-c-text-2);
+}
+
+.save-btn {
+  background: var(--ev-button-alt-bg);
+  border: 1px solid var(--ev-button-alt-border);
+  color: var(--ev-button-alt-text);
+}
+
+.save-btn:hover {
+  background: var(--ev-button-alt-hover-bg);
+}
