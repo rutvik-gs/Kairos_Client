@@ -21,7 +21,7 @@
         class="chat-textarea"
         :rows="2"
         placeholder="Write a message..."
-        @keyup.enter.exact="onSend"
+        @keydown.enter.exact.prevent="onSend"
         @keydown.enter.shift="onShiftEnter"
       ></textarea>
       <button
@@ -148,6 +148,11 @@ function onSend(): void {
   if (!text) return
   console.log('send:', text)
   message.value = ''
+  nextTick(() => triggerResize())
+}
+
+function onShiftEnter(): void {
+  // Let the browser insert the newline, then trigger resize
   nextTick(() => triggerResize())
 }
 </script>
